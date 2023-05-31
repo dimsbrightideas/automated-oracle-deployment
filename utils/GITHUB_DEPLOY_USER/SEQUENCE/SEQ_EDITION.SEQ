@@ -1,0 +1,25 @@
+DECLARE
+  v_count   NUMBER;
+BEGIN
+  SELECT COUNT (*)
+    INTO v_count
+    FROM all_objects
+   WHERE     object_type = 'SEQUENCE'
+         AND object_name = 'SEQ_EDITION'
+         AND OWNER = 'GITHUB_DEPLOY_USER';
+
+  IF v_count = 0
+  THEN
+    EXECUTE IMMEDIATE 'CREATE SEQUENCE GITHUB_DEPLOY_USER.SEQ_EDITION
+      START WITH 1
+      MAXVALUE 9999999999999999999999999999
+      MINVALUE 0
+      NOCYCLE
+      CACHE 20
+      NOORDER
+      NOKEEP
+      NOSCALE
+      GLOBAL';
+  END IF;
+END;
+/

@@ -1,0 +1,163 @@
+version: '3'
+services:
+  baseline: 
+    environment:
+      - ORACLE_URL
+      - ORACLE_USER
+      - ORACLE_PASSWORD
+      - SCHEMA
+      - DEBUG
+      - RUNTIME_ENV
+      - FLYWAY_CONF_PATH
+      - FLYWAY_SQL_PATH                
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: flyway/flyway:9.15.0
+    container_name: flyway-baseline-${SCHEMA}
+    stdin_open: true
+    tty: true
+    command: /bin/sh -c "scripts/flyway.sh flyway_baseline"
+    volumes:
+      - flyway/sql/${SCHEMA}:/flyway/sql/${SCHEMA}
+      - flyway/conf:/flyway/conf
+      - scripts:/flyway/scripts     
+
+  info: 
+    environment:
+      - ORACLE_URL
+      - ORACLE_USER
+      - ORACLE_PASSWORD
+      - SCHEMA
+      - DEBUG      
+      - RUNTIME_ENV
+      - FLYWAY_CONF_PATH
+      - FLYWAY_SQL_PATH
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: flyway/flyway:9.15.0
+    container_name: flyway-info-${SCHEMA}
+    stdin_open: true
+    tty: true
+    command: /bin/sh -c "scripts/flyway.sh flyway_info"
+    volumes:
+      - /flyway/sql/${SCHEMA}:/flyway/sql/${SCHEMA}
+      - /flyway/conf:/flyway/conf
+      - /scripts:/flyway/scripts   
+
+  validate:
+    environment:
+      - ORACLE_URL
+      - ORACLE_USER
+      - ORACLE_PASSWORD
+      - SCHEMA
+      - DEBUG      
+      - RUNTIME_ENV 
+      - FLYWAY_CONF_PATH
+      - FLYWAY_SQL_PATH            
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: flyway/flyway:9.15.0
+    container_name: flyway-validate-${SCHEMA}
+    stdin_open: true
+    tty: true
+    command: /bin/sh -c "scripts/flyway.sh flyway_validate"
+    volumes:
+      - flyway/sql/${SCHEMA}:/flyway/sql/${SCHEMA}
+      - flyway/conf:/flyway/conf
+      - scripts:/flyway/scripts   
+  
+  repair:
+    environment:
+      - ORACLE_URL
+      - ORACLE_USER
+      - ORACLE_PASSWORD
+      - SCHEMA
+      - DEBUG      
+      - RUNTIME_ENV
+      - FLYWAY_CONF_PATH
+      - FLYWAY_SQL_PATH       
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: flyway/flyway:9.15.0
+    container_name: flyway-repair-${SCHEMA}
+    stdin_open: true
+    tty: true    
+    command: /bin/sh -c "scripts/flyway.sh flyway_repair"
+    volumes:
+      - flyway/sql/${SCHEMA}:/flyway/sql/${SCHEMA}
+      - flyway/conf:/flyway/conf
+      - scripts:/flyway/scripts      
+  
+  migrate:
+    environment:
+      - ORACLE_URL
+      - ORACLE_USER
+      - ORACLE_PASSWORD
+      - SCHEMA
+      - DEBUG      
+      - RUNTIME_ENV
+      - FLYWAY_CONF_PATH
+      - FLYWAY_SQL_PATH     
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: flyway/flyway:9.15.0
+    container_name: flyway-migrate-${SCHEMA}
+    stdin_open: true
+    tty: true    
+    command: /bin/sh -c "scripts/flyway.sh flyway_migrate"
+    volumes:
+      - flyway/sql/${SCHEMA}:/flyway/sql/${SCHEMA}
+      - flyway/conf:/flyway/conf
+      - scripts:/flyway/scripts   
+
+  clean:
+    environment:
+      - ORACLE_URL
+      - ORACLE_USER
+      - ORACLE_PASSWORD
+      - SCHEMA
+      - DEBUG      
+      - RUNTIME_ENV
+      - FLYWAY_CONF_PATH
+      - FLYWAY_SQL_PATH
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: flyway/flyway:9.15.0
+    container_name: flyway-clean-${SCHEMA}
+    stdin_open: true
+    tty: true    
+    command: /bin/sh -c "scripts/flyway.sh flyway_clean"
+    volumes:
+      - flyway/sql/${SCHEMA}:/flyway/sql/${SCHEMA}
+      - flyway/conf:/flyway/conf
+      - scripts:/flyway/scripts   
+
+  flyway-deploy:
+    environment:
+      - ORACLE_URL
+      - ORACLE_USER
+      - ORACLE_PASSWORD
+      - SCHEMA
+      - SCHEMAS
+      - DEBUG      
+      - RUNTIME_ENV
+      - FLYWAY_CONF_PATH
+      - FLYWAY_SQL_PATH
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: flyway/flyway:9.10.0
+    container_name: flyway-${SCHEMA}
+    stdin_open: true
+    tty: true
+    command: /bin/sh -c "scripts/flyway.sh flyway_deploy"
+    volumes:
+      - flyway/sql/${SCHEMA}:/flyway/sql/${SCHEMA}
+      - flyway/conf:/flyway/conf
+      - scripts:flyway/scripts   
